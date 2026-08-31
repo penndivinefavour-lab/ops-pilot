@@ -1,20 +1,12 @@
-import { seedDemoData } from '../db/seed';
+#!/usr/bin/env node
+import { seedDemoData, ATLAS_PROJECT_NAME, ATLAS_INCIDENT_ID, ATLAS_TASK_ID } from './seed';
+import { getServiceRoleClient } from './client';
 
-async function main() {
-  console.log('[OpsPilot] Seeding demo data...');
-  try {
-    const result = await seedDemoData();
-    console.log('[OpsPilot] Seed complete:');
-    console.log(`  Project ID:  ${result.projectId}`);
-    console.log(`  Incident ID: ${result.incidentId}`);
-    console.log(`  Task ID:     ${result.taskId}`);
-    console.log(`  Owner ID:    ${result.ownerId}`);
-    console.log(`  Agent ID:    ${result.agentId}`);
-    process.exit(0);
-  } catch (err) {
-    console.error('[OpsPilot] Seed failed:', err);
-    process.exit(1);
-  }
+async function run() {
+  console.log('Seeding Supabase...');
+  const result = await seedDemoData();
+  console.log('[OpsPilot] Seeded demo data: projectId=', result.projectId, 'incidentId=', result.incidentId, 'taskId=', result.taskId);
+  console.log('[OpsPilot] Demo: ' + ATLAS_PROJECT_NAME + ' blocked with Incident #' + ATLAS_INCIDENT_ID + ' and Task #' + ATLAS_TASK_ID);
 }
 
-main();
+run().catch(e => { console.error('[OpsPilot] Seed failed:', e); process.exit(1); });
